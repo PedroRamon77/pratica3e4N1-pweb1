@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: ghostwhite;
+    width: 80%;
+    margin: 5% auto;
+    padding: 3%;
+    border: 1px solid gray;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 3%;
+    color: black;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    column-gap: 1%;
+    row-gap: 5%;
+}
+
+.grid a {
+    display: block;
+    background-color: white;
+    padding: 5%;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    border: 1px solid gray;
+    font-size: 80%;
+    border-radius: 10px;
+}
+
+.grid a:hover {
+    background-color: red;
+    color: white;
+}
