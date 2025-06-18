@@ -1,38 +1,31 @@
+<form method="post">
+    <h2>Registro de Despesas Mensais</h2>
+    <?php for ($i = 0; $i < 5; $i++): ?>
+        Despesa <?= $i + 1 ?> (R$): <input type="number" step="0.01" name="despesas[]"><br>
+    <?php endfor; ?>
+    <button type="submit">Calcular Média</button>
+</form>
+
 <?php
-/*
-13. Sistema de avalia¸c˜ao: Com as duas notas de um aluno, calcule a m´edia. Exiba
-"Aprovado" se a m´edia for ≥ 7, "Recupera¸c~ao" se for entre 5 e 6.9, e "Reprovado"
-se for < 5.
-*/
-$nota1 = 8;
-$nota2 = 5;
-$media = ($nota1 + $nota2) / 2;
-?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Questão 13</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['despesas'])) {
+    $despesas = array_filter($_POST['despesas'], function($valor) {
+        return $valor !== '';
+    });
 
-<h1>Sistema de avaliacao</h1>
+    if (!empty($despesas)) {
+        $soma = array_sum($despesas);
+        $quantidade = count($despesas);
+        $media = $soma / $quantidade;
 
-<p> Situacao:
-    <?php
-        if ($media >= 7) {
-            echo "Aprovado";
-        } elseif ($media >= 5) {
-            echo "Recuperação";
-        } else {
-            echo "Reprovado";
+        echo "<h3>Despesas Informadas:</h3><ul>";
+        foreach ($despesas as $valor) {
+            echo "<li>R$ " . number_format($valor, 2, ',', '.') . "</li>";
         }
-    ?>
-</p>
+        echo "</ul>";
 
-<br>
-<a href="../index.php">Voltar para as Questões</a>
-
-</body>
-</html>
+        echo "<p><strong>Média das despesas:</strong> R$ " . number_format($media, 2, ',', '.') . "</p>";
+    } else {
+        echo "<p>Preencha pelo menos uma despesa válida.</p>";
+    }
+}
+?>

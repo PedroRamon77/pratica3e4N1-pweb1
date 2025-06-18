@@ -1,36 +1,31 @@
+<form method="post">
+    <h2>Cadastro Inicial do Inventário</h2>
+    <label>Quantidade de Notebook: <input type="number" name="inventario[notebook]" value="20"></label><br>
+    <label>Quantidade de Mouse: <input type="number" name="inventario[mouse]" value="50"></label><br>
+    <label>Quantidade de Teclado: <input type="number" name="inventario[teclado]" value="30"></label><br>
+    <button type="submit">Atualizar Inventário</button>
+</form>
+
 <?php
-/*
-20. Verifica¸c˜ao de acesso (Login): Um sistema de login precisa verificar se um
-usu´ario est´a ativo e se possui permiss˜oes de administrador. Apenas se ambas as
-condi¸c˜oes forem verdadeiras, conceda o acesso total. N˜ao implemente um sistema
-de login, apenas simule.
-*/
-$usuarioAtivo = true;
-$usuarioAdmin = true;
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['inventario'])) {
+    $inventario = [];
+
+    foreach ($_POST['inventario'] as $produto => $quantidade) {
+        $inventario[$produto] = intval($quantidade);
+    }
+
+    if (!array_key_exists('monitor', $inventario)) {
+        $inventario['monitor'] = 15;
+    }
+
+    if (array_key_exists('notebook', $inventario)) {
+        $inventario['notebook'] += 5;
+    }
+
+    echo "<h3>Inventário Final:</h3><ul>";
+    foreach ($inventario as $produto => $quantidade) {
+        echo "<li>$produto: $quantidade unidades</li>";
+    }
+    echo "</ul>";
+}
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Questão 20</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-
-<h1>Verificação de Acesso</h1>
-
-<p> Seu acesso é: 
-    <?php
-        if ($usuarioAtivo && $usuarioAdmin) {
-            echo "Total";
-        } else {
-            echo "Restrito";
-        }
-    ?>
-</p>
-
-<br>
-<a href="../index.php">Voltar para as Questões</a>
-
-</body>
-</html>

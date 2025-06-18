@@ -1,39 +1,33 @@
+<form method="post">
+    <h2>Registro de Treinos dos Alunos</h2>
+    <?php for ($i = 0; $i < 3; $i++): ?>
+        <fieldset>
+            <legend>Aluno <?= $i + 1 ?></legend>
+            Nome: <input type="text" name="alunos[<?= $i ?>][nome]"><br>
+            <?php for ($j = 0; $j < 3; $j++): ?>
+                Resultado da Sessão <?= $j + 1 ?>: <input type="number" step="0.01" name="alunos[<?= $i ?>][resultados][]"><br>
+            <?php endfor; ?>
+        </fieldset>
+        <br>
+    <?php endfor; ?>
+    <button type="submit">Calcular Médias</button>
+</form>
+
 <?php
-/*
-14. Agendamento semanal: Um aplicativo de agenda exibe compromissos. Dada
-uma vari´avel num´erica representando o dia da semana (1 para Domingo, 2 para
-Segunda, etc.), exiba o nome do dia correspondente.
-*/
-$dia = 5;
-?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Questão 14</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['alunos'])) {
+    $registrosTreino = $_POST['alunos'];
 
-<h1>Agendamento semanal</h1>
+    echo "<h3>Média dos Resultados por Aluno:</h3>";
+    foreach ($registrosTreino as $aluno) {
+        $nome = trim($aluno['nome']);
+        $resultados = array_filter($aluno['resultados'], function($r) {
+            return $r !== '';
+        });
 
-<p> Dia da Semana:
-    <?php
-        switch ($dia) {
-            case 1: echo "Domingo"; break;
-            case 2: echo "Segunda"; break;
-            case 3: echo "Terça"; break;
-            case 4: echo "Quarta"; break;
-            case 5: echo "Quinta"; break;
-            case 6: echo "Sexta"; break;
-            case 7: echo "Sábado"; break;
-            default: echo "Dia inválido";
+        if (!empty($nome) && !empty($resultados)) {
+            $media = array_sum($resultados) / count($resultados);
+            echo "<p>Aluno: $nome - Média: " . number_format($media, 2, ',', '.') . "</p>";
         }
-    ?>
-</p>
-
-<br>
-<a href="../index.php">Voltar para as Questões</a>
-
-</body>
-</html>
+    }
+}
+?>

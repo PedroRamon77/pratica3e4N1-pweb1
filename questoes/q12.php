@@ -1,35 +1,33 @@
+<form method="post">
+    <h2>Gestão de Preços - Aplicar aumento de 10%</h2>
+
+    <?php for ($i = 0; $i < 4; $i++): ?>
+        Preço antigo <?= $i + 1 ?>: <input type="number" step="0.01" name="precosAntigos[]" required><br>
+    <?php endfor; ?>
+
+    <button type="submit">Aplicar aumento</button>
+</form>
+
 <?php
-/*
-12. Classifica ̧c ̃ao de temperatura: Um sensor meteorol ́ogico registra a temperatura.
-Classifique e exiba se a temperatura  ́e "Positiva", "Negativa" ou "Zero".
-*/
-$sensor = 30;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $precosAntigos = $_POST['precosAntigos'];
+
+    $precosAntigos = array_map('floatval', $precosAntigos);
+
+    $precosNovos = array_map(function($preco) {
+        return round($preco * 1.10, 2);
+    }, $precosAntigos);
+
+    echo "<h3>Preços Antigos:</h3><ul>";
+    foreach ($precosAntigos as $preco) {
+        echo "<li>R$ " . number_format($preco, 2, ',', '.') . "</li>";
+    }
+    echo "</ul>";
+
+    echo "<h3>Preços com 10% de aumento:</h3><ul>";
+    foreach ($precosNovos as $preco) {
+        echo "<li>R$ " . number_format($preco, 2, ',', '.') . "</li>";
+    }
+    echo "</ul>";
+}
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Questão 12</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-
-<h1>Classificacao de temperatura:</h1>
-
-<p> Temperatura:
-    <?php
-        if ($sensor > 0) {
-            echo "Positiva";
-        } elseif ($sensor < 0) {
-            echo "Negativa";
-        } else {
-            echo "Zero";
-        }
-    ?>
-</p>
-
-<br>
-<a href="../index.php">Voltar para as Questões</a>
-
-</body>
-</html>

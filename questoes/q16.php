@@ -1,36 +1,23 @@
+<form method="post">
+    <h2>Cadastro de Caracteres Permitidos para Senha</h2>
+    <?php for ($i = 0; $i < 8; $i++): ?>
+        Caractere <?= $i + 1 ?>: <input type="text" name="caracteres[]" maxlength="1"><br>
+    <?php endfor; ?>
+    <button type="submit">Gerar String Base</button>
+</form>
+
 <?php
-/*
-16. Cadastro de usu´ario: Ao preencher um cadastro, o usu´ario informa seu estado
-civil com um c´odigo (´unica letra). Exiba uma descri¸c˜ao para "C" (Casado/a), "S"
-(Solteiro/a), "D" (Divorciado/a) ou "O" (Outro).
-*/
-$estadoCivil = "S";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['caracteres'])) {
+    $caracteresPermitidos = array_filter($_POST['caracteres'], function($c) {
+        return $c !== '';
+    });
+
+    if (!empty($caracteresPermitidos)) {
+        $stringBase = implode('', $caracteresPermitidos);
+        echo "<h3>String base para geração de senha:</h3>";
+        echo "<p>$stringBase</p>";
+    } else {
+        echo "<p>Por favor, informe pelo menos um caractere permitido.</p>";
+    }
+}
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Questão 16</title>
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-
-<h1>Cadastro de usuario</h1>
-
-<p> Estado Civil:
-    <?php
-        switch (strtoupper($estadoCivil)) {
-            case "C": echo "Casado(a)"; break;
-            case "S": echo "Solteiro(a)"; break;
-            case "D": echo "Divorciado(a)"; break;
-            case "O": echo "Outro"; break;
-            default: echo "Código inválido";
-        }
-    ?>
-</p>
-
-<br>
-<a href="../index.php">Voltar para as Questões</a>
-
-</body>
-</html>
